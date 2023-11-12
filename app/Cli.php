@@ -4,6 +4,7 @@ namespace App;
 
 use RuntimeException;
 use Symfony\Component\Console\Command\Command;
+use Symfony\Component\Console\Formatter\OutputFormatterStyle;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
@@ -20,30 +21,38 @@ class Cli extends Command
 
     protected function execute(InputInterface $input, OutputInterface $output): int
     {
-        $actions = new Actions($input->getArgument('filename'));
+        // Set style for output text
+        $output->getFormatter()->setStyle('success', new OutputFormatterStyle('green', options: ['bold', 'blink']));
+        $output->getFormatter()->setStyle('error', new OutputFormatterStyle('red', options: ['bold', 'blink']));
         $inputAction = $input->getArgument('action');
-        switch ($inputAction) {
-            case ActionsType::CALCULATE->value:
-                $output->writeln($actions->calculate());
-                break;
-            case ActionsType::REMOVE->value:
-                $product = $this->ask($input, $output, "Enter product's name: ");
-                if ($actions->remove($product)) {
-                    $output->writeln('Successful removed');
-                }
-                break;
-            case ActionsType::ADD->value:
-            case ActionsType::CHANGE->value:
-                $product = $this->ask($input, $output, "Enter product's name:");
-                $price = (int)$this->ask($input, $output, "Enter product's price:");
-                if ($inputAction === ActionsType::ADD->value && $actions->add($product, $price)) {
-                    $output->writeln('Successful added');
-                } elseif ($inputAction === ActionsType::CHANGE->value && $actions->change($product, $price)) {
-                    $output->writeln('Successful changed');
-                }
-                break;
-            default:
-                throw new RuntimeException('Wrong action, use: add, remove, change, calculate');
+        try {
+            $actions = new Actions($input->getArgument('filename'));
+            switch ($inputAction) {
+                case ActionsType::CALCULATE->value:
+                    $output->writeln($actions->calculate());
+                    break;
+                case ActionsType::REMOVE->value:
+                    $product = $this->ask($input, $output, "<fg=yellow>Enter product's name:  </>");
+                    if ($actions->remove($product)) {
+                        $output->writeln('<success>Successful removed</>');
+                    }
+                    break;
+                case ActionsType::ADD->value:
+                case ActionsType::CHANGE->value:
+                    $product = $this->ask($input, $output, "<fg=yellow>Enter product's name: </>");
+                    $price = (int)$this->ask($input, $output, "<fg=yellow>Enter product's price: </>");
+                    if ($inputAction === ActionsType::ADD->value && $actions->add($product, $price)) {
+                        $output->writeln('<success>Successful added</>');
+                    } elseif ($inputAction === ActionsType::CHANGE->value && $actions->change($product, $price)) {
+                        $output->writeln('<success>Successful changed</>');
+                    }
+                    break;
+                default:
+                    throw new RuntimeException('Wrong action, use: add, remove, change, calculate');
+            }
+        } catch (RuntimeException $e) {
+            $output->writeln(sprintf("<error>%s</error>", $e->getMessage()));
+            return Command::FAILURE;
         }
         return Command::SUCCESS;
     }
