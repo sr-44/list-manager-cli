@@ -46,7 +46,7 @@ class Actions
         }
         $updatedLines = [];
         foreach ($this->lines as $line) {
-            if (str_contains($line, $product)) {
+            if (str_contains(mb_strtolower($line), mb_strtolower($product))) {
                 $line = sprintf('%s - %d', $product, $price);
             }
             $updatedLines[] = $line;
@@ -62,7 +62,7 @@ class Actions
         }
         $updatedLines = [];
         foreach ($this->lines as $line) {
-            if (!str_contains($line, $product)) {
+            if (!str_contains(mb_strtolower($line), mb_strtolower($product))) {
                 $updatedLines[] = $line;
             }
         }
@@ -80,7 +80,7 @@ class Actions
     }
     private function checkProduct(string $product): bool
     {
-        return str_contains(file_get_contents($this->filename), $product);
+        return str_contains(mb_strtolower(file_get_contents($this->filename)), mb_strtolower($product));
 
     }
 }

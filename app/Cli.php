@@ -113,7 +113,7 @@ class Cli extends Command
 
     private function checkProduct(InputInterface $input, $answer): bool
     {
-        return str_contains(file_get_contents($input->getArgument('filename')), $answer);
+        return str_contains(mb_strtolower(file_get_contents($input->getArgument('filename'))), mb_strtolower($answer));
     }
 
 }
