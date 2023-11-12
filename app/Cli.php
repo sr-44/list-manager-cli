@@ -15,8 +15,9 @@ class Cli extends Command
     protected function configure(): void
     {
         $this->setName('cli')
-            ->addArgument('filename', InputArgument::REQUIRED)
-            ->addArgument('action', InputArgument::REQUIRED);
+            ->setDescription('Command for add, change, remove and calculate products in file')
+            ->addArgument('filename', InputArgument::REQUIRED, 'Path to file')
+            ->addArgument('action', InputArgument::REQUIRED, 'action add|remove|change|calculate');
     }
 
     protected function execute(InputInterface $input, OutputInterface $output): int
@@ -73,6 +74,7 @@ class Cli extends Command
         $helper = $this->getHelper('question');
         $question = new Question($question);
 
+        // validate input datas for integer type
         if ($intValidate) {
             $validator = static function (string $answer) {
                 if (!preg_match('/^-?\d+$/', $answer)) {
@@ -80,6 +82,7 @@ class Cli extends Command
                 }
                 return (int)$answer;
             };
+            // validate input datas (products) in file
         } elseif ($productExists !== null) {
             $validator = function (string $answer) use ($input, $productExists) {
                 $productExists ? $this->checkProductExists($input, $answer) : $this->checkProductNotExists($input, $answer);
