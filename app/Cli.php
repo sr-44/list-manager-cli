@@ -80,20 +80,9 @@ class Cli extends Command
                 }
                 return (int)$answer;
             };
-        }
-
-        if ($productExists === true) {
-            $validator = function (string $answer) use ($input) {
-                if (!$this->checkProduct($input, $answer)) {
-                    throw new RuntimeException('This product does not exists');
-                }
-                return $answer;
-            };
-        } elseif ($productExists === false) {
-            $validator = function (string $answer) use ($input) {
-                if ($this->checkProduct($input, $answer)) {
-                    throw new RuntimeException('This product is already exists');
-                }
+        } elseif ($productExists !== null) {
+            $validator = function (string $answer) use ($input, $productExists) {
+                $productExists ? $this->checkProductExists($input, $answer) : $this->checkProductNotExists($input, $answer);
                 return $answer;
             };
         }
@@ -105,6 +94,19 @@ class Cli extends Command
         return $helper->ask($input, $output, $question);
     }
 
+    private function checkProductExists(InputInterface $input, $answer): void
+    {
+        if (!$this->checkProduct($input, $answer)) {
+            throw new RuntimeException('This product does not exist');
+        }
+    }
+
+    private function checkProductNotExists(InputInterface $input, $answer): void
+    {
+        if ($this->checkProduct($input, $answer)) {
+            throw new RuntimeException('This product already exists');
+        }
+    }
 
     private function checkProduct(InputInterface $input, $answer): bool
     {
