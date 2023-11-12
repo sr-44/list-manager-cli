@@ -18,7 +18,12 @@ class Cli extends Command
 
     protected function execute(InputInterface $input, OutputInterface $output): int
     {
-        $output->writeln('Hello world');
+        $actions = new Actions($input->getArgument('filename'));
+        if ($input->getArgument('action') === 'add') {
+            if ($actions->add('sdsd', 10)) {
+                $output->writeln('success');
+            }
+        }
 
         return Command::SUCCESS;
     }
