@@ -40,7 +40,7 @@ class Cli extends Command
                 case ActionsType::ADD->value:
                 case ActionsType::CHANGE->value:
                     $product = $this->ask($input, $output, "<fg=yellow>Enter product's name: </>");
-                    $price = (int)$this->ask($input, $output, "<fg=yellow>Enter product's price: </>");
+                    $price = (int)$this->ask($input, $output, "<fg=yellow>Enter product's price: </>", intValidate: true);
                     if ($inputAction === ActionsType::ADD->value && $actions->add($product, $price)) {
                         $output->writeln('<success>Successful added</>');
                     } elseif ($inputAction === ActionsType::CHANGE->value && $actions->change($product, $price)) {
@@ -57,10 +57,18 @@ class Cli extends Command
         return Command::SUCCESS;
     }
 
-    private function ask(InputInterface $input, OutputInterface $output, $question)
+    private function ask(InputInterface $input, OutputInterface $output, $question, bool $intValidate = false)
     {
         $helper = $this->getHelper('question');
         $question = new Question($question);
+        if ($intValidate) {
+            $question->setValidator(function (string $answer) {
+                if (!preg_match('#\d#', $answer)) {
+                    throw new RuntimeException('Please enter numeric');
+                }
+                return (int)$answer;
+            });
+        }
         return $helper->ask($input, $output, $question);
     }
 
