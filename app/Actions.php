@@ -39,6 +39,45 @@ class Actions
         return file_put_contents($this->filename, sprintf("%s - %d\n", $product, $price), FILE_APPEND);
     }
 
+    public function change(string $product, int $price): false|int
+    {
+        if (!$this->checkProduct($product)) {
+            throw new RuntimeException('Product does not exists');
+        }
+        $updatedLines = [];
+        foreach ($this->lines as $line) {
+            if (str_contains($line, $product)) {
+                $line = sprintf('%s - %d', $product, $price);
+            }
+            $updatedLines[] = $line;
+        }
+        return file_put_contents($this->filename, implode(PHP_EOL, $updatedLines) . PHP_EOL);
+    }
+
+
+    public function remove(string $product): false|int
+    {
+        if (!$this->checkProduct($product)) {
+            throw new RuntimeException('Product does not exists');
+        }
+        $updatedLines = [];
+        foreach ($this->lines as $line) {
+            if (!str_contains($line, $product)) {
+                $updatedLines[] = $line;
+            }
+        }
+        return file_put_contents($this->filename, implode(PHP_EOL, $updatedLines) . PHP_EOL);
+    }
+
+    public function calculate(): int
+    {
+        $sum = 0;
+        foreach ($this->lines as $line) {
+            preg_match('/^.+ - (\d+)$/u', $line, $matches);
+            $sum += (int)$matches[1];
+        }
+        return $sum;
+    }
     private function checkProduct(string $product): bool
     {
         return str_contains(file_get_contents($this->filename), $product);

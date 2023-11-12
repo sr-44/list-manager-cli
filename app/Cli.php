@@ -22,11 +22,23 @@ class Cli extends Command
         $actions = new Actions($input->getArgument('filename'));
         $product = $this->ask($input, $output, 'Введите продукт: ');
         $price = (int)$this->ask($input, $output, 'Введите цену: </>');
-
-        if ($input->getArgument('action') === 'add') {
+        
+        $inputAction = $input->getArgument('action');
+        
+        if ($inputAction === 'add') {
             if ($actions->add($product, $price)) {
                 $output->writeln('success');
             }
+        } elseif ($inputAction === 'change') {
+            if ($actions->change($product, $price)) {
+                $output->writeln('success');
+            }
+        } elseif ($inputAction === 'remove') {
+            if ($actions->remove($product)) {
+                $output->writeln('success');
+            }
+        } elseif ($inputAction === 'calculate') {
+            $output->writeln($actions->calculate());
         }
 
         return Command::SUCCESS;
