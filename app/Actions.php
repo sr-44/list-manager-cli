@@ -78,9 +78,15 @@ class Actions
         }
         return $sum;
     }
+
     private function checkProduct(string $product): bool
     {
-        return str_contains(mb_strtolower(file_get_contents($this->filename)), mb_strtolower($product));
-
+        foreach ($this->lines as $line) {
+            preg_match('/^(.+) - \d+$/u', mb_strtolower($line), $matches);
+            if ($product === mb_strtolower($matches[1])) {
+                return true;
+            }
+        }
+        return false;
     }
 }
