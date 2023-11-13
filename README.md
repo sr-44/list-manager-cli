@@ -4,7 +4,7 @@ Command-line application built with PHP 8 and Symfony Console component.
 
 ## Requirements
 
-- PHP 8.0 or later.
+- PHP 8.1 or later.
 - Symfony Console component.
 
 ## Installation
