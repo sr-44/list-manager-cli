@@ -1,4 +1,4 @@
-# AlifTask
+# List manager cli
 
 Command-line application built with PHP 8 and Symfony Console component.
 
@@ -12,13 +12,13 @@ Command-line application built with PHP 8 and Symfony Console component.
 ### Clone the Repository
 
 ```bash
-git clone https://github.com/sr-44/aliftask
+git clone https://github.com/sr-44/list-manager-cli
 ```
 
 ### Move to the Repository
 
 ```bash
-cd aliftask
+cd list-manager-cli
 ```
 
 ### Install Dependencies
