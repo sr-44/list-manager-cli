@@ -43,7 +43,7 @@ final class AddCommand extends Command
             $repository = $this->getItemRepository(filePath: $filePath);
             $repository->add(name: $product, price: $price);
         } catch (CannotOpenFileException|ProductExistsException $e) {
-            $output->writeln($e->getMessage());
+            $output->writeln(sprintf("<error>%s</>", $e->getMessage()));
             return self::FAILURE;
         }
 
