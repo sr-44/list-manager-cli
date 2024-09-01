@@ -36,7 +36,7 @@ final class UpdateCommand extends Command
 
         $product = $validatorService->askValidatedString('Enter product name: ');
         $price = $validatorService->askValidatedInteger('Enter product price: ');
-        $filePath = $input->getArgument('filename');
+        $filePath = $input->getArgument('filepath');
 
         try {
             $repository = $this->getItemRepository($filePath);
