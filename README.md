@@ -32,13 +32,13 @@ composer install
 Run the application using the following command:
 
 ```bash
-php main.php cli <filename> <action>
+php main.php <action> <filename>
 ```
 
 For additional help, use:
 
 ```bash
-php main.php cli -h
+php main.php -h
 ```
 
 Make sure to replace `<filename>` and `<action>` with the actual filename and action parameters.
