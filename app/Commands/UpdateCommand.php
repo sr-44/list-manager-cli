@@ -24,18 +24,20 @@ final class UpdateCommand extends Command
             ->addArgument('filepath', mode: InputArgument::REQUIRED, description: 'Update product price');
     }
 
-
     protected function execute(InputInterface $input, OutputInterface $output): int
     {
         $this->setOutputStyles($output->getFormatter());
+
         $validatorService = new ValidateInputService(
             questionHelper: $this->getHelper('question'),
             input: $input,
             output: $output
         );
+
         $product = $validatorService->askValidatedString('Enter product name: ');
         $price = $validatorService->askValidatedInteger('Enter product price: ');
         $filePath = $input->getArgument('filename');
+
         try {
             $repository = $this->getItemRepository($filePath);
             $repository->update(name: $product, price: $price);
@@ -43,6 +45,7 @@ final class UpdateCommand extends Command
             $output->writeln(sprintf("<error>%s</>", $e->getMessage()));
             return self::FAILURE;
         }
+
         $output->writeln('<succes>Product updated successfully</>');
         return self::SUCCESS;
     }

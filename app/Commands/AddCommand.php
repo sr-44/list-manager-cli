@@ -28,14 +28,17 @@ final class AddCommand extends Command
     protected function execute(InputInterface $input, OutputInterface $output): int
     {
         $this->setOutputStyles($output->getFormatter());
+
         $validatorService = new ValidateInputService(
             questionHelper: $this->getHelper('question'),
             input: $input,
             output: $output
         );
+
         $product = $validatorService->askValidatedString('Enter product name: ');
         $price = $validatorService->askValidatedInteger('Enter product price: ');
         $filePath = $input->getArgument('filepath');
+
         try {
             $repository = $this->getItemRepository(filePath: $filePath);
             $repository->add(name: $product, price: $price);
@@ -43,6 +46,7 @@ final class AddCommand extends Command
             $output->writeln($e->getMessage());
             return self::FAILURE;
         }
+
         $output->writeln('<success>Product successfully added</>');
         return self::SUCCESS;
     }

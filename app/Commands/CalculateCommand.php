@@ -25,14 +25,18 @@ final class CalculateCommand extends Command
     protected function execute(InputInterface $input, OutputInterface $output): int
     {
         $this->setOutputStyles($output->getFormatter());
+
         $filePath = $input->getArgument('filepath');
+
         try {
             $repository = $this->getItemRepository($filePath);
         } catch (CannotOpenFileException $e) {
             $output->writeln(sprintf("<error>%s</>", $e->getMessage()));
             return self::INVALID;
         }
+
         $calculated = $repository->totalSum();
+
         $output->writeln(sprintf("<success>%s</>", $calculated));
         return self::SUCCESS;
     }

@@ -18,4 +18,5 @@ $app->add(new CalculateCommand());
 try {
     $app->run();
 } catch (Exception $e) {
+    exit($e->getMessage());
 }

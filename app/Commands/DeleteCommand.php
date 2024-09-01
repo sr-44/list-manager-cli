@@ -27,13 +27,16 @@ final class DeleteCommand extends Command
     protected function execute(InputInterface $input, OutputInterface $output): int
     {
         $this->setOutputStyles($output->getFormatter());
+
         $validatorService = new ValidateInputService(
             questionHelper: $this->getHelper('question'),
             input: $input,
             output: $output
         );
+
         $product = $validatorService->askValidatedString('Enter product name: ');
         $filePath = $input->getArgument('filepath');
+
         try {
             $repository = $this->getItemRepository($filePath);
             $repository->delete($product);
@@ -41,6 +44,7 @@ final class DeleteCommand extends Command
             $output->writeln(sprintf("<error>%s</>", $e->getMessage()));
             return self::FAILURE;
         }
+
         $output->writeln('<success>Product successfully removed</>');
         return self::SUCCESS;
     }
