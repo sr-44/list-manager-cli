@@ -6,7 +6,7 @@ use App\Commands\DeleteCommand;
 use App\Commands\UpdateCommand;
 use Symfony\Component\Console\Application;
 
-require_once 'vendor/autoload.php';
+require_once __DIR__ . '/vendor/autoload.php';
 
 $app = new Application();
 
