@@ -46,7 +46,7 @@ final class UpdateCommand extends Command
             return self::FAILURE;
         }
 
-        $output->writeln('<succes>Product updated successfully</>');
+        $output->writeln('<success>Product updated successfully</>');
         return self::SUCCESS;
     }
 
